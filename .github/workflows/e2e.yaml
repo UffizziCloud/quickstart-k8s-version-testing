@@ -112,21 +112,25 @@ jobs:
           fi
 
           # Apply kustomized manifests to virtual cluster.
-          kubectl apply --kustomize . --kubeconfig ./kubeconfig
+          kubectl apply --kustomize . --kubeconfig ./kubeconfig-1276
+          kubectl apply --kustomize . --kubeconfig ./kubeconfig-1282
 
           # Allow uffizzi to sync the resources
           sleep 5
 
           # Get the hostnames assigned by uffizzi
-          export WEB_HOST=$(kubectl get ingress web --kubeconfig kubeconfig -o json | jq '.spec.rules[0].host' | tr -d '"')
+          export WEB_HOST_1=$(kubectl get ingress web --kubeconfig ./kubeconfig-1276 -o json | jq '.spec.rules[0].host' | tr -d '"')
+          export WEB_HOST_2=$(kubectl get ingress web --kubeconfig ./kubeconfig-1282 -o json | jq '.spec.rules[0].host' | tr -d '"')
 
           if [[ ${RUNNER_DEBUG} == 1 ]]; then
-            kubectl get all --kubeconfig ./kubeconfig
+            kubectl get all --kubeconfig ./kubeconfig-1276
+            kubectl get all --kubeconfig ./kubeconfig-1282
           fi
 
           echo "web_url=${WEB_HOST}" >> $GITHUB_OUTPUT
 
-          echo "Access the \`web\` endpoint at [\`${WEB_HOST}\`](http://${WEB_HOST})" >> $GITHUB_STEP_SUMMARY
+          echo "Access the \`web\` endpoint deployed on k8s version 1.27.6 at [\`${WEB_HOST_1}\`](http://${WEB_HOST_1})" >> $GITHUB_STEP_SUMMARY
+          echo "Access the \`web\` endpoint deployed on k8s version 1.28.2 at [\`${WEB_HOST_2}\`](http://${WEB_HOST_2})" >> $GITHUB_STEP_SUMMARY
 
       - name: Create or Update Comment with Deployment URL
         uses: peter-evans/create-or-update-comment@v2
@@ -136,7 +140,8 @@ jobs:
           body: |
             ## Uffizzi Ephemeral Environment - Virtual Cluster - E2E Helm Chart
 
-            E2E tests in progress on the `pr-${{ github.event.pull_request.number }}-e2e-helm` cluster.
+            E2E tests in progress on the `pr-${{ github.event.pull_request.number }}-1276` and
+            `pr-${{ github.event.pull_request.number }}-1282` virtual clusters.
           edit-mode: replace
 
   uffizzi-cluster-delete:
@@ -147,33 +152,50 @@ jobs:
         uses: UffizziCloud/cluster-action@main
         with:
           action: delete
-          cluster-name: pr-${{ github.event.pull_request.number }}-e2e-helm
+          cluster-name: pr-${{ github.event.pull_request.number }}-1276
           server: https://app.uffizzi.com
-          kubeconfig-name: kubeconfig-1276
 
       - name: Delete Virtual Cluster
         uses: UffizziCloud/cluster-action@main
         with:
           action: delete
-          cluster-name: pr-${{ github.event.pull_request.number }}-e2e-helm
+          cluster-name: pr-${{ github.event.pull_request.number }}-1282
           server: https://app.uffizzi.com
-          kubeconfig-name: kubeconfig-1282
 
       # Identify comment to be updated
-      - name: Find comment for Ephemeral Environment
+      - name: Find comment for Ephemeral Environment 1
         uses: peter-evans/find-comment@v2
-        id: find-comment
+        id: find-comment-1
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: "github-actions[bot]"
-          body-includes: pr-${{ github.event.pull_request.number }}-e2e-helm
+          body-includes: pr-${{ github.event.pull_request.number }}-1276
+          direction: last
+
+      # Identify comment to be updated
+      - name: Find comment for Ephemeral Environment 2
+        uses: peter-evans/find-comment@v2
+        id: find-comment-2
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: pr-${{ github.event.pull_request.number }}-1282
           direction: last
 
       - name: Update Comment with Deletion
         uses: peter-evans/create-or-update-comment@v2
         with:
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          comment-id: ${{ steps.find-comment-1.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Uffizzi Cluster `pr-${{ github.event.pull_request.number }}` was deleted.
+            Uffizzi Cluster `pr-${{ github.event.pull_request.number }}-1276` was deleted.
+          edit-mode: replace
+
+      - name: Update Comment with Deletion
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ steps.find-comment-2.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Uffizzi Cluster `pr-${{ github.event.pull_request.number }}-1282` was deleted.
           edit-mode: replace
