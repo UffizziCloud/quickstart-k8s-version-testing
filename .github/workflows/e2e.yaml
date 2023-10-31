@@ -149,6 +149,15 @@ jobs:
           action: delete
           cluster-name: pr-${{ github.event.pull_request.number }}-e2e-helm
           server: https://app.uffizzi.com
+          kubeconfig-name: kubeconfig-1276
+
+      - name: Delete Virtual Cluster
+        uses: UffizziCloud/cluster-action@main
+        with:
+          action: delete
+          cluster-name: pr-${{ github.event.pull_request.number }}-e2e-helm
+          server: https://app.uffizzi.com
+          kubeconfig-name: kubeconfig-1282
 
       # Identify comment to be updated
       - name: Find comment for Ephemeral Environment
