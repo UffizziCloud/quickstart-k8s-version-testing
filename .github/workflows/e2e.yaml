@@ -104,11 +104,14 @@ jobs:
         run: |
           # Change the image name to those just built and pushed.
           kustomize edit set image uffizzi/hello-world-k8s=${{ needs.build-image.outputs.tags }}
-
+          
+          cp ./kubeconfig-1276 ./kubeconfig-1282 ./github/k8s
           # Apply kustomized manifests to virtual cluster.
-          kubectl apply --kustomize .github/k8s --kubeconfig ./kubeconfig-1276
-          kubectl apply --kustomize .github/k8s --kubeconfig ./kubeconfig-1282
-
+          (
+            cd ./github/k8s
+            kubectl apply --kustomize . --kubeconfig ./kubeconfig-1276
+            kubectl apply --kustomize . --kubeconfig ./kubeconfig-1282
+          )
           # Allow uffizzi to sync the resources
           sleep 5
 
