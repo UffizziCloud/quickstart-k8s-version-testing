@@ -107,7 +107,7 @@ jobs:
             ls -la
           fi
           (
-            cd ./github/k8s
+            cd .github/k8s
           
             # Change the image name to those just built and pushed.
             kustomize edit set image uffizzi/hello-world-k8s=${{ needs.build-image.outputs.tags }}
