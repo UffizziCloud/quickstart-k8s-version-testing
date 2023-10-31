@@ -102,13 +102,12 @@ jobs:
       - name: Apply Kustomize to test the new image
         id: prev
         run: |
-          cd .github/k8s
           # Change the image name to those just built and pushed.
           kustomize edit set image uffizzi/hello-world-k8s=${{ needs.build-image.outputs.tags }}
 
           # Apply kustomized manifests to virtual cluster.
-          kubectl apply --kustomize . --kubeconfig ./kubeconfig-1276
-          kubectl apply --kustomize . --kubeconfig ./kubeconfig-1282
+          kubectl apply --kustomize .github/k8s --kubeconfig ./kubeconfig-1276
+          kubectl apply --kustomize .github/k8s --kubeconfig ./kubeconfig-1282
 
           # Allow uffizzi to sync the resources
           sleep 5
@@ -122,7 +121,8 @@ jobs:
             kubectl get all --kubeconfig ./kubeconfig-1282
           fi
 
-          echo "web_url=${WEB_HOST}" >> $GITHUB_OUTPUT
+          echo "web_url_1=${WEB_HOST_1}" >> $GITHUB_OUTPUT
+          echo "web_url_2=${WEB_HOST_2}" >> $GITHUB_OUTPUT
 
           echo "Access the \`web\` endpoint deployed on k8s version 1.27.6 at [\`${WEB_HOST_1}\`](http://${WEB_HOST_1})" >> $GITHUB_STEP_SUMMARY
           echo "Access the \`web\` endpoint deployed on k8s version 1.28.2 at [\`${WEB_HOST_2}\`](http://${WEB_HOST_2})" >> $GITHUB_STEP_SUMMARY
