@@ -102,6 +102,10 @@ jobs:
       - name: Apply Kustomize to test the new image
         id: prev
         run: |
+          if [[ ${RUNNER_DEBUG} == 1 ]]; then
+            pwd
+            ls -la
+          fi
           (
             cd ./github/k8s
           
