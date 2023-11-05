@@ -88,7 +88,7 @@ jobs:
         with:
           cluster-name: pr-${{ github.event.pull_request.number }}-1276
           server: https://app.uffizzi.com
-          k8s-version: 1.27.6
+          k8s-version: 1.27
           kubeconfig: kubeconfig-1276
 
       - name: Create and connect to vcluster
@@ -96,7 +96,7 @@ jobs:
         with:
           cluster-name: pr-${{ github.event.pull_request.number }}-1282
           server: https://app.uffizzi.com
-          k8s-version: 1.28.2
+          k8s-version: 1.28
           kubeconfig: kubeconfig-1282
 
       - name: Apply Kustomize to test the new image
