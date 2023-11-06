@@ -22,7 +22,8 @@ Once the PR is open and the workflow is triggered, you can see the status of the
 ![github-action-start](.github/assets/github-action-start.png)
 
 The workflow will also ensure that the application is deployed successfully and is accessible via the ingress.
-The ingresses for the two clusters will be available in the PR comments.
+The names of the two clusters will be available in the PR comments and the ingresses to the deployments on the clusters
+will be available in the github actions summary.
 
 ![github-action-comment](.github/assets/github-action-comment.png)
 

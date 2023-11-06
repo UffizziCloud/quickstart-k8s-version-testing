@@ -60,7 +60,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: "github-actions[bot]"
-          body-includes: pr-${{ github.event.pull_request.number }}-e2e-1276
+          body-includes: pr-${{ github.event.pull_request.number }}-1276
           direction: last
 
       # Create/Update comment with action deployment status
@@ -77,7 +77,7 @@ jobs:
 
             :gear: Updating now by workflow run [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
-            Cluster names will be `pr-${{ github.event.pull_request.number }}-e2e-1276` and `pr-${{ github.event.pull_request.number }}-e2e-1282`.
+            Cluster names will be `pr-${{ github.event.pull_request.number }}-1276` and `pr-${{ github.event.pull_request.number }}-1282`.
 
             Download the Uffizzi CLI to interact with the upcoming virtual cluster
             https://docs.uffizzi.com/install
