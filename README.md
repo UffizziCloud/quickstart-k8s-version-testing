@@ -19,11 +19,12 @@ two different virtual clusters of versions 1.27 and 1.28 on Uffizzi.
 
 Once the PR is open and the workflow is triggered, you can see the status of the workflow in the PR checks.
 
-[//]: # (picture from .github/assets/github-action-start.png)
 ![github-action-start](.github/assets/github-action-start.png)
 
 The workflow will also ensure that the application is deployed successfully and is accessible via the ingress.
 The ingresses for the two clusters will be available in the PR comments.
+
+![github-action-comment](.github/assets/github-action-comment.png)
 
 **2. Authenticate with Uffizzi and access the Uffizzi virtual clusters**
 
