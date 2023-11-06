@@ -1,4 +1,4 @@
-name: Multicluster e2e
+name: k8s version testing e2e
 
 on:
   pull_request:
