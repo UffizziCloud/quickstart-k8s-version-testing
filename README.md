@@ -26,6 +26,7 @@ The names of the two clusters will be available in the PR comments and the ingre
 will be available in the github actions summary.
 
 ![github-action-comment](.github/assets/github-action-comment.png)
+![github-action-comment](.github/assets/github-summary.png)
 
 **2. Authenticate with Uffizzi and access the Uffizzi virtual clusters**
 
